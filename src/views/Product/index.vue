@@ -107,7 +107,7 @@
 		<div class="main">
 			<el-table :data="computedProList" border style="width: 100%">
 				<el-table-column prop="name" label="名称" width="250" />
-				<el-table-column prop="cost" label="价格(元)" width="120" sortable />
+				<el-table-column prop="cost" label="成本(元)" width="120" sortable />
 				<el-table-column prop="weight" label="重量(kg)" width="120" sortable />
 				<el-table-column prop="v" label="体积(cm^3)" width="140" sortable />
 				<el-table-column label="操作" width="150">
@@ -135,7 +135,7 @@
 					<el-form-item label="名称">
 						<el-input v-model="diaLogDate.name" placeholder="输入商品信息" />
 					</el-form-item>
-					<el-form-item label="价格(元)">
+					<el-form-item label="成本(元)">
 						<el-input v-model="diaLogDate.cost" />
 					</el-form-item>
 					<el-form-item label="重量(kg)">

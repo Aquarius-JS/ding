@@ -3,7 +3,9 @@ import Product from "@/views/Product/index.vue";
 import Layout from "@/views/Layout/index.vue";
 import Department from "@/views/Department/index.vue";
 import PriceSystem from "@/views/PriceSystem/index.vue";
-import Platform from "@/views/Platform/index.vue"
+import Platform from "@/views/Platform/index.vue";
+import ProfitTarget from "@/views/ProfitTarget/index.vue";
+import PriceControl from "@/views/PriceControl/index.vue";
 import Login from "@/views/Login/index.vue";
 
 const router = createRouter({
@@ -31,7 +33,15 @@ const router = createRouter({
 				},
 				{
 					path: "/platform",
-					component: Platform
+					component: Platform,
+				},
+				{
+					path: "/profit_target",
+					component: ProfitTarget,
+				},
+				{
+					path: "/price_control",
+					component: PriceControl,
 				},
 			],
 		},

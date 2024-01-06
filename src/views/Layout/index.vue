@@ -21,13 +21,13 @@
 						<el-card>
 							<el-menu :default-active="path" class="el-menu-vertical-demo" router>
 								<el-menu-item index="/product">
-									<span>产品基本信息管理</span>
+									<span>产品基本信息</span>
 								</el-menu-item>
-								<el-menu-item index="/product1">
-									<span>产品基本信息管理</span>
+								<el-menu-item index="/profit_target">
+									<span>利润目标信息</span>
 								</el-menu-item>
-								<el-menu-item index="/product2">
-									<span>产品基本信息管理</span>
+								<el-menu-item index="/price_control">
+									<span>控价标准</span>
 								</el-menu-item>
 								<el-sub-menu index="/other">
 									<template #title>其他</template>
