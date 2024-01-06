@@ -29,6 +29,12 @@
 								<el-menu-item index="/product2">
 									<span>产品基本信息管理</span>
 								</el-menu-item>
+								<el-sub-menu index="/other">
+									<template #title>其他</template>
+									<el-menu-item index="/department">部门</el-menu-item>
+									<el-menu-item index="/platform">平台</el-menu-item>
+									<el-menu-item index="/price_system">价格体系</el-menu-item>
+								</el-sub-menu>
 							</el-menu>
 						</el-card>
 					</div>
@@ -58,6 +64,9 @@
 			}
 			:deep(.el-menu-item) {
 				justify-content: space-around;
+			}
+			:deep(.el-sub-menu__title){
+				justify-content: center;
 			}
 		}
 		.main {

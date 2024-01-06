@@ -34,9 +34,4 @@ export default defineConfig({
 			},
 		},
 	},
-	// server: {
-	// 	proxy: {
-	// 		"/api": "http://47.108.52.110:8888",
-	// 	},
-	// },
 });
