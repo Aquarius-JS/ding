@@ -53,7 +53,7 @@
 			<el-button type="primary" @click="addHandle">新增</el-button>
 		</div>
 		<div class="main">
-			<el-table :data="deparments" border>
+			<el-table :data="priceSystemlist" border>
 				<el-table-column prop="price_system_name" label="名称" width="250" />
 				<el-table-column label="操作" width="150">
 					<template #default="{ row }">
