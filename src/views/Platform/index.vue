@@ -32,7 +32,7 @@
 	const updateHandle = data => {
 		diaLogData.value = {
 			...data,
-			Platform_deduction_points: data.Platform_deduction_points * 100,
+			Platform_deduction_points: (data.Platform_deduction_points * 100).toFixed(2),
 			dialogVisible: true,
 			isAdd: false,
 		};
@@ -89,7 +89,7 @@
 				<el-table-column label="平台扣点(%)" width="250">
 					<template #default="{ row }">
 						<div>
-							{{ row.Platform_deduction_points * 100 }}
+							{{ (row.Platform_deduction_points * 100).toFixed(2) }}
 						</div>
 					</template>
 				</el-table-column>
