@@ -48,13 +48,14 @@
 				platform: diaLogDate.value.platform,
 				profit_target: diaLogDate.value.profit_target * 0.01,
 			});
-			console.log(res)
+			console.log(res);
 			if (res.statusText === "OK") {
 				ElMessage({
 					type: "success",
 					message: "添加成功",
 				});
 				getAll();
+				cancleHandle();
 			}
 		} else {
 			let res = await ProfitTargetAPI.update({
@@ -70,6 +71,7 @@
 					message: "更新成功",
 				});
 				getAll();
+				cancleHandle();
 			}
 		}
 	};
@@ -116,7 +118,11 @@
 				<el-table-column prop="price_system" label="价格体系" width="250" />
 				<el-table-column prop="department" label="部门" width="120" />
 				<el-table-column prop="platform" label="平台" width="120" />
-				<el-table-column prop="profit_target" label="利润目标" width="140" sortable />
+				<el-table-column label="利润目标(%)" width="140" sortable>
+					<template #default="{ row }">
+						{{ row.profit_target * 100 }}
+					</template>
+				</el-table-column>
 				<el-table-column label="操作" width="150">
 					<template #default="{ row }">
 						<div>
