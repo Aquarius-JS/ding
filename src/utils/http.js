@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const httpInstance = axios.create({
 	baseURL: "http://47.108.52.110:8888/api",
+	// baseURL: "http://36.110.131.59:8888//api",
 	// baseURL: "/api",
 	timeout: 5000,
 });
