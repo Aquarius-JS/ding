@@ -88,6 +88,7 @@
 	const updateHandle = async data => {
 		diaLogDate.value = {
 			...data,
+			profit_target: data.profit_target * 100,
 			isAdd: false,
 			dialogVisible: true,
 		};
