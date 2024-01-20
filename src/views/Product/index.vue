@@ -1,6 +1,6 @@
 <script setup>
 	import { onMounted, ref, computed } from "vue";
-	import { ElMessage,Upload } from "element-plus";
+	import { ElMessage } from "element-plus";
 	import { ProductAPI } from "../../apis/product";
 	import { useProductStore } from "@/stores/product";
 	import { storeToRefs } from "pinia";
