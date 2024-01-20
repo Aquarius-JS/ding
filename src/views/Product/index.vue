@@ -1,6 +1,6 @@
 <script setup>
 	import { onMounted, ref, computed } from "vue";
-	import { ElMessage } from "element-plus";
+	import { ElMessage,Upload } from "element-plus";
 	import { ProductAPI } from "../../apis/product";
 	import { useProductStore } from "@/stores/product";
 	import { storeToRefs } from "pinia";
@@ -103,6 +103,7 @@
 				style="width: 200px; margin: 0 10px"
 			/>
 			<el-button type="primary" @click="addHandle">新增</el-button>
+			<el-icon><Upload /></el-icon>
 		</div>
 		<div class="main">
 			<el-table :data="computedProList" border style="width: 100%">
