@@ -3,9 +3,12 @@
 	import { ElMessage } from "element-plus";
 	import { ProductAPI } from "../../apis/product";
 	import { useProductStore } from "@/stores/product";
+	import { Upload, Download } from "@element-plus/icons-vue";
+	import { upload, download } from "@/utils/xlsx/index";
 	import { storeToRefs } from "pinia";
 	const { productList } = storeToRefs(useProductStore());
 	const name = ref("");
+	const fileInputRef = ref();
 	const diaLogDate = ref({
 		dialogVisible: false,
 		isAdd: true,
@@ -88,6 +91,10 @@
 			v: 0,
 		};
 	};
+	const uploadExcel = async () => {
+		let res = await upload(fileInputRef.value.files);
+		console.log(res);
+	};
 	onMounted(async () => {
 		getAll();
 	});
@@ -103,7 +110,13 @@
 				style="width: 200px; margin: 0 10px"
 			/>
 			<el-button type="primary" @click="addHandle">新增</el-button>
-			<el-icon><Upload /></el-icon>
+			<input type="file" ref="fileInputRef" />
+			<el-button type="primary" plain @click="uploadExcel">
+				<el-icon><Upload /></el-icon>
+			</el-button>
+			<el-button type="primary" plain>
+				<el-icon><Download /></el-icon>
+			</el-button>
 		</div>
 		<div class="main">
 			<el-table :data="computedProList" border style="width: 100%">
