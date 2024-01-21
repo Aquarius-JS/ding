@@ -7,9 +7,11 @@
 	import { upload, download } from "@/utils/xlsx/index";
 	import { storeToRefs } from "pinia";
 	const { productList } = storeToRefs(useProductStore());
+	// 过滤条件name
 	const name = ref("");
+	const isLoading = ref(false);
 	const fileInputRef = ref();
-	const diaLogDate = ref({
+	const rowDataTemplate = ref({
 		dialogVisible: false,
 		isAdd: true,
 		id: "111",
@@ -30,8 +32,10 @@
 		}
 	);
 	const getAll = async () => {
-		let res = await ProductAPI.getAll();
+		isLoading.value = true;
+		const res = await ProductAPI.getAll();
 		productList.value = res.data;
+		isLoading.value = false;
 	};
 	const delHandle = async id => {
 		let res = await ProductAPI.delById(id);
@@ -41,59 +45,40 @@
 		});
 		getAll();
 	};
-	const addHandle = () => {
-		diaLogDate.value.dialogVisible = true;
-		diaLogDate.value.isAdd = true;
-	};
-	const updateHandle = data => {
-		diaLogDate.value = { ...data, dialogVisible: true, isAdd: false };
-		console.log(diaLogDate.value);
-	};
-	const confirmHandle = async () => {
-		console.log(diaLogDate.value.isAdd);
-		if (diaLogDate.value.isAdd) {
-			await ProductAPI.addProduct({
-				name: diaLogDate.value.name,
-				cost: diaLogDate.value.cost * 1,
-				weight: diaLogDate.value.weight * 1,
-				v: diaLogDate.value.v * 1,
-			});
-			getAll();
-			ElMessage({
-				type: "success",
-				message: "添加成功",
-			});
-		} else {
-			await ProductAPI.updateProduct({
-				id: diaLogDate.value.id,
-				name: diaLogDate.value.name,
-				cost: diaLogDate.value.cost * 1,
-				weight: diaLogDate.value.weight * 1,
-				v: diaLogDate.value.v * 1,
-			});
-			getAll();
-			ElMessage({
-				type: "success",
-				message: "修改成功",
-			});
-		}
-
-		cancleHandle();
-	};
-	const cancleHandle = () => {
-		diaLogDate.value = {
-			dialogVisible: false,
-			isAdd: true,
-			id: "",
+	const addHandle = async () => {
+		await ProductAPI.addProduct({
 			name: "",
 			cost: 0,
 			weight: 0,
 			v: 0,
-		};
+		});
+		await getAll();
+	};
+	const updateHandle = async e => {
+		const data = e.row;
+		isLoading.value = true;
+		await ProductAPI.updateProduct({
+			id: data.id,
+			name: data.name,
+			cost: data.cost * 1,
+			weight: data.weight * 1,
+			v: data.v * 1,
+		});
+		isLoading.value = false;
 	};
 	const uploadExcel = async () => {
-		let res = await upload(fileInputRef.value.files);
+		const res = await upload(fileInputRef.value.files);
 		console.log(res);
+	};
+	const downLoadExcel = async () => {
+		const data = productList.value.data.map(item => ({
+			名称: item.name,
+			成本: item.cost,
+			重量: item.weight,
+			体积: item.v,
+		}));
+		download(data, "产品基本信息");
+		console.log(data);
 	};
 	onMounted(async () => {
 		getAll();
@@ -114,59 +99,77 @@
 			<el-button type="primary" plain @click="uploadExcel">
 				<el-icon><Upload /></el-icon>
 			</el-button>
-			<el-button type="primary" plain>
+			<el-button type="primary" plain @click="downLoadExcel">
 				<el-icon><Download /></el-icon>
 			</el-button>
 		</div>
 		<div class="main">
-			<el-table :data="computedProList" border style="width: 100%">
-				<el-table-column prop="name" label="名称" width="250" />
-				<el-table-column prop="cost" label="成本(元)" width="120" sortable />
-				<el-table-column prop="weight" label="重量(kg)" width="120" sortable />
-				<el-table-column prop="v" label="体积(cm^3)" width="140" sortable />
-				<el-table-column label="操作" width="150">
-					<template #default="{ row }">
-						<div>
-							<el-button type="danger" size="small" plain @click="delHandle(row.id)"
-								>删除</el-button
-							>
-							<el-button type="success" size="small" plain @click="updateHandle(row)"
-								>修改</el-button
-							>
-						</div>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div class="table-container">
+				<vxe-table
+					auto-resize
+					stripe
+					border
+					round
+					resizable
+					show-overflow
+					:loading="isLoading"
+					height="auto"
+					:data="computedProList"
+					:edit-config="{ trigger: 'dblclick', mode: 'row' }"
+					@edit-closed="updateHandle"
+				>
+					<vxe-column field="name" title="名称" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.name"
+								type="text"
+								placeholder="请输入名称"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="cost" title="成本(元)" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.cost"
+								type="text"
+								placeholder="请输入成本"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="weight" title="重量(g)" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.weight"
+								type="text"
+								placeholder="请输入重量"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="v" title="体积( cm³ )" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.v"
+								type="text"
+								placeholder="请输入重量"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column title="操作">
+						<template #default="{ row }">
+							<div>
+								<el-button
+									type="danger"
+									size="small"
+									plain
+									@click="delHandle(row.id)"
+									>删除</el-button
+								>
+							</div>
+						</template>
+					</vxe-column>
+				</vxe-table>
+			</div>
 		</div>
-		<el-dialog
-			v-model="diaLogDate.dialogVisible"
-			:title="diaLogDate.isAdd === true ? '新增' : '修改'"
-			width="30%"
-			:before-close="handleClose"
-		>
-			<template #default>
-				<el-form :model="diaLogDate" label-width="100px">
-					<el-form-item label="名称">
-						<el-input v-model="diaLogDate.name" placeholder="输入商品信息" />
-					</el-form-item>
-					<el-form-item label="成本(元)">
-						<el-input v-model="diaLogDate.cost" />
-					</el-form-item>
-					<el-form-item label="重量(kg)">
-						<el-input v-model="diaLogDate.weight" />
-					</el-form-item>
-					<el-form-item label="体积(cm^3)">
-						<el-input v-model="diaLogDate.v" />
-					</el-form-item>
-				</el-form>
-			</template>
-			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="cancleHandle" size="small">取消</el-button>
-					<el-button type="primary" @click="confirmHandle" size="small"> 确定 </el-button>
-				</span>
-			</template>
-		</el-dialog>
 	</div>
 </template>
 
@@ -174,6 +177,11 @@
 	.product {
 		.header {
 			margin-bottom: 10px;
+		}
+		.main {
+			.table-container {
+				height: 70vh;
+			}
 		}
 	}
 </style>

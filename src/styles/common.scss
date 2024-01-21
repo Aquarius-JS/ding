@@ -33,18 +33,18 @@ a {
 i {
 	font-style: normal;
 }
-input[type="text"],
-input[type="search"],
-input[type="password"],
-input[type="checkbox"] {
-	padding: 0;
-	outline: none;
-	border: none;
-	-webkit-appearance: none;
-	&::placeholder {
-		color: #ccc;
-	}
-}
+// input[type="text"],
+// input[type="search"],
+// input[type="password"],
+// input[type="checkbox"] {
+// 	padding: 0;
+// 	outline: none;
+// 	border: none;
+// 	-webkit-appearance: none;
+// 	&::placeholder {
+// 		color: #ccc;
+// 	}
+// }
 img {
 	max-width: 100%;
 	max-height: 100%;
