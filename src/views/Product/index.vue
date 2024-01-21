@@ -16,6 +16,7 @@
 		isAdd: true,
 		id: "111",
 		name: "11",
+		financial_costs: 0,
 		cost: 10,
 		weight: 0,
 		v: 0,
@@ -35,6 +36,7 @@
 		isLoading.value = true;
 		const res = await ProductAPI.getAll();
 		productList.value = res.data;
+		console.log(productList.value.data);
 		isLoading.value = false;
 	};
 	const delHandle = async id => {
@@ -47,7 +49,8 @@
 	};
 	const addHandle = async () => {
 		await ProductAPI.addProduct({
-			name: "",
+			name: "(产品名称)",
+			financial_costs: 0,
 			cost: 0,
 			weight: 0,
 			v: 0,
@@ -60,6 +63,7 @@
 		await ProductAPI.updateProduct({
 			id: data.id,
 			name: data.name,
+			financial_costs: data.financial_costs * 1,
 			cost: data.cost * 1,
 			weight: data.weight * 1,
 			v: data.v * 1,
@@ -68,17 +72,26 @@
 	};
 	const uploadExcel = async () => {
 		const res = await upload(fileInputRef.value.files);
-		console.log(res);
+		const data = res.map(item => ({
+			name: item["名称"],
+			financial_costs: item["财务成本(元)"] * 1,
+			cost: item["业务成本(元)"] * 1,
+			weight: item["重量(g)"] * 1,
+			v: item["体积(cm³)"] * 1,
+		}));
+		isLoading.value = true;
+		await ProductAPI.batchProduct(data);
+		await getAll();
 	};
 	const downLoadExcel = async () => {
 		const data = productList.value.data.map(item => ({
 			名称: item.name,
-			成本: item.cost,
-			重量: item.weight,
-			体积: item.v,
+			"财务成本(元)": item.financial_costs * 1,
+			"业务成本(元)": item.cost * 1,
+			"重量(g)": item.weight * 1,
+			"体积(cm³)": item.v * 1,
 		}));
 		download(data, "产品基本信息");
-		console.log(data);
 	};
 	onMounted(async () => {
 		getAll();
@@ -127,10 +140,19 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="cost" title="成本(元)" :edit-render="{}">
+					<vxe-column field="cost" title="财务成本(元)" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.cost"
+								type="text"
+								placeholder="请输入成本"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="financial_costs" title="业务成本(元)" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.financial_costs"
 								type="text"
 								placeholder="请输入成本"
 							></vxe-input>

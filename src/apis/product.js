@@ -11,9 +11,9 @@ export const ProductAPI = {
 		return request({
 			method: "POST",
 			url: "/del/product",
-			data:{
-				id:id
-			}
+			data: {
+				id: id,
+			},
 		});
 	},
 	addProduct(obj) {
@@ -28,6 +28,13 @@ export const ProductAPI = {
 			method: "POST",
 			url: "/update/product",
 			data: obj,
+		});
+	},
+	batchProduct(list) {
+		return request({
+			method: "POST",
+			url: "/update/batch/product",
+			data: list,
 		});
 	},
 };
