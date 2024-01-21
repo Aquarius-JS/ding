@@ -30,4 +30,11 @@ export const ProfitTargetAPI = {
 			},
 		});
 	},
+	batchUpdate(data) {
+		return request({
+			method: "POST",
+			url: "/update/batch/profit_target",
+			data: data,
+		});
+	},
 };

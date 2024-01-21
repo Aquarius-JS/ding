@@ -1,10 +1,14 @@
 <script setup>
+	import { Upload, Download } from "@element-plus/icons-vue";
 	import { ProfitTargetAPI } from "@/apis/profitTarget";
 	import { PriceSystemAPI } from "@/apis/priceSystem";
 	import { DepartmentAPI } from "@/apis/department";
 	import { PlatformAPI } from "@/apis/platform";
 	import { onMounted, ref } from "vue";
+	import { download, upload } from "@/utils/xlsx";
 
+	const isLoading = ref(false);
+	const fileInputRef = ref();
 	const profitTargetList = ref([]);
 	const priceSystemList = ref([]);
 	const departmentList = ref([]);
@@ -27,74 +31,34 @@
 		platformList.value = platRes.data.data;
 	};
 	const getAll = async () => {
-		let res = await ProfitTargetAPI.getAll();
+		isLoading.value = true;
+		const res = await ProfitTargetAPI.getAll();
 		profitTargetList.value = res.data.data;
+		isLoading.value = false;
 	};
-	const addHandle = () => {
-		diaLogDate.value = {
-			dialogVisible: true,
-			isAdd: true,
+	const addHandle = async () => {
+		isLoading.value = true;
+		await ProfitTargetAPI.add({
 			price_system: "",
 			department: "",
 			platform: "",
+			financial_profit_target: 0,
 			profit_target: 0,
-		};
+		});
+		await getAll();
 	};
-	const confirmHandle = async () => {
-		if (diaLogDate.value.isAdd) {
-			let res = await ProfitTargetAPI.add({
-				price_system: diaLogDate.value.price_system,
-				department: diaLogDate.value.department,
-				platform: diaLogDate.value.platform,
-				profit_target: diaLogDate.value.profit_target * 0.01,
-			});
-			console.log(res);
-			if (res.statusText === "OK") {
-				ElMessage({
-					type: "success",
-					message: "添加成功",
-				});
-				getAll();
-				cancleHandle();
-			}
-		} else {
-			let res = await ProfitTargetAPI.update({
-				id: diaLogDate.value.id,
-				price_system: diaLogDate.value.price_system,
-				department: diaLogDate.value.department,
-				platform: diaLogDate.value.platform,
-				profit_target: diaLogDate.value.profit_target * 0.01,
-			});
-			if (res.statusText === "OK") {
-				ElMessage({
-					type: "success",
-					message: "更新成功",
-				});
-				getAll();
-				cancleHandle();
-			}
-		}
-	};
-	const cancleHandle = () => {
-		diaLogDate.value = {
-			dialogVisible: false,
-			isAdd: true,
-			price_system: "",
-			department: "",
-			platform: "",
-			profit_target: 0,
+	const updateHandle = async e => {
+		console.log(e.row)
+		const data = {
+			...e.row,
+			_X_ROW_KEY: undefined,
+			financial_profit_target: e.row.financial_profit_target * 1,
+			profit_target: e.row.profit_target * 1,
 		};
-	};
-	const updateHandle = async data => {
-		diaLogDate.value = {
-			...data,
-			profit_target: data.profit_target * 100,
-			isAdd: false,
-			dialogVisible: true,
-		};
+		ProfitTargetAPI.update(data);
 	};
 	const delHandle = async id => {
-		let res = await ProfitTargetAPI.delById(id);
+		const res = await ProfitTargetAPI.delById(id);
 		if (res.statusText === "OK") {
 			ElMessage({
 				type: "success",
@@ -102,6 +66,30 @@
 			});
 			getAll();
 		}
+	};
+	const uploadExcel = async () => {
+		profitTargetList.value = [];
+		isLoading.value = true;
+		const res = await upload(fileInputRef.value.files);
+		const data = res.map(item => ({
+			price_system: item["价格体系"],
+			department: item["部门"],
+			platform: item["平台"],
+			financial_profit_target: item["财务利润目标(%)"] * 0.01,
+			profit_target: item["业务利润目标(%)"] * 0.01,
+		}));
+		await ProfitTargetAPI.batchUpdate(data);
+		await getAll();
+	};
+	const downLoadExcel = async () => {
+		const data = profitTargetList.value.map(item => ({
+			价格体系: item.price_system,
+			部门: item.department,
+			平台: item.platform,
+			"财务利润目标(%)": item.financial_profit_target * 100,
+			"业务利润目标(%)": item.profit_target * 100,
+		}));
+		download(data, "利润目标信息");
 	};
 	onMounted(async () => {
 		init();
@@ -113,105 +101,106 @@
 	<div class="profit_target">
 		<div class="header">
 			<el-button type="primary" @click="addHandle">新增</el-button>
+			<input type="file" ref="fileInputRef" />
+			<el-button type="primary" plain @click="uploadExcel">
+				<el-icon><Upload /></el-icon>
+			</el-button>
+			<el-button type="primary" plain @click="downLoadExcel">
+				<el-icon><Download /></el-icon>
+			</el-button>
 		</div>
 		<div class="main">
-			<el-table :data="profitTargetList" border style="width: 100%">
-				<el-table-column prop="price_system" label="价格体系" width="250" />
-				<el-table-column prop="department" label="部门" width="120" />
-				<el-table-column prop="platform" label="平台" width="120" />
-				<el-table-column label="利润目标(%)" width="140" sortable>
-					<template #default="{ row }">
-						{{ row.profit_target * 100 }}
-					</template>
-				</el-table-column>
-				<el-table-column label="操作" width="150">
-					<template #default="{ row }">
-						<div>
-							<el-button type="danger" size="small" plain @click="delHandle(row.id)"
-								>删除</el-button
-							>
-							<el-button type="success" size="small" plain @click="updateHandle(row)"
-								>修改</el-button
-							>
-						</div>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div class="table-container">
+				<vxe-table
+					auto-resize
+					stripe
+					border
+					round
+					resizable
+					show-overflow
+					:loading="isLoading"
+					height="auto"
+					:data="profitTargetList"
+					:edit-config="{ trigger: 'dblclick', mode: 'row' }"
+					@edit-closed="updateHandle"
+				>
+					<vxe-column field="price_system" title="价格体系" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.price_system"
+								type="text"
+								placeholder="请输入价格体系"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="department" title="部门" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.department"
+								type="text"
+								placeholder="请输入部门"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="platform" title="平台" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.platform"
+								type="text"
+								placeholder="请输入平台"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column title="财务利润目标(%)" :edit-render="{}">
+						<template #default="{ row }">
+							<span>{{ row.financial_profit_target * 100 }}</span>
+						</template>
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.financial_profit_target"
+								type="text"
+								placeholder="请输入财务利润目标"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column title="业务利润目标(%)" :edit-render="{}">
+						<template #default="{ row }">
+							<span>{{ row.profit_target * 100 }}</span>
+						</template>
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.profit_target"
+								type="text"
+								placeholder="请输入业务利润目标"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column title="操作">
+						<template #default="{ row }">
+							<div>
+								<el-button
+									type="danger"
+									size="small"
+									plain
+									@click="delHandle(row.id)"
+									>删除</el-button
+								>
+							</div>
+						</template>
+					</vxe-column>
+				</vxe-table>
+			</div>
 		</div>
-		<el-dialog
-			v-model="diaLogDate.dialogVisible"
-			:title="diaLogDate.isAdd === true ? '新增' : '修改'"
-			width="30%"
-			:before-close="handleClose"
-		>
-			<template #default>
-				<el-form :model="diaLogDate" label-width="100px">
-					<el-form-item label="价格体系">
-						<el-select
-							v-model="diaLogDate.price_system"
-							class="m-2"
-							placeholder="请选择价格体系"
-							size="large"
-						>
-							<el-option
-								v-for="item in priceSystemList"
-								:key="item.price_system_name"
-								:label="item.price_system_name"
-								:value="item.price_system_name"
-							/>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="部门">
-						<el-select
-							v-model="diaLogDate.department"
-							class="m-2"
-							placeholder="请选择部门"
-							size="large"
-						>
-							<el-option
-								v-for="item in departmentList"
-								:key="item.department_name"
-								:label="item.department_name"
-								:value="item.department_name"
-							/>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="平台">
-						<el-select
-							v-model="diaLogDate.platform"
-							class="m-2"
-							placeholder="请选择价格体系"
-							size="large"
-						>
-							<el-option
-								v-for="item in platformList"
-								:key="item.platform_name"
-								:label="item.Platform_deduction_points + '  ' + item.platform_name"
-								:value="item.platform_name"
-							/>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="利润目标(%)">
-						<el-input v-model="diaLogDate.profit_target">
-							<template #suffix>
-								<span>%</span>
-							</template>
-						</el-input>
-					</el-form-item>
-				</el-form>
-			</template>
-			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="cancleHandle" size="small">取消</el-button>
-					<el-button type="primary" @click="confirmHandle" size="small"> 确定 </el-button>
-				</span>
-			</template>
-		</el-dialog>
 	</div>
 </template>
 
 <style scoped lang="scss">
 	.header {
 		margin-bottom: 10px;
+	}
+	.main {
+		.table-container {
+			height: 70vh;
+		}
 	}
 </style>
