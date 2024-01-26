@@ -33,7 +33,7 @@
 	const getAll = async () => {
 		isLoading.value = true;
 		const res = await ProfitTargetAPI.getAll();
-		profitTargetList.value = res.data.data;
+		profitTargetList.value = res.data;
 		isLoading.value = false;
 	};
 	const addHandle = async () => {

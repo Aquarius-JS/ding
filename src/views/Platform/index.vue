@@ -12,7 +12,7 @@
 	const getPlatformList = async () => {
 		let res = await PlatformAPI.getAll();
 		console.log(res.data.data);
-		platformlist.value = res.data.data;
+		platformlist.value = res.data;
 	};
 	const delHandle = async id => {
 		let res = await PlatformAPI.delById(id);

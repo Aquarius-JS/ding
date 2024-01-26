@@ -10,7 +10,7 @@
 	const getPriceSystem = async () => {
 		let res = await PriceSystemAPI.getAll();
         console.log(res.data.data)
-		priceSystemlist.value = res.data.data;
+		priceSystemlist.value = res.data;
 	};
 	const delHandle = async id => {
 		let res = await PriceSystemAPI.delById(id);

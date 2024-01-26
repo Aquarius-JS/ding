@@ -7,6 +7,8 @@ import Platform from "@/views/Platform/index.vue";
 import ProfitTarget from "@/views/ProfitTarget/index.vue";
 import PriceControl from "@/views/PriceControl/index.vue";
 import Login from "@/views/Login/index.vue";
+import { storeToRefs } from "pinia";
+import { useUserInfoStore } from "@/stores/user";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +52,14 @@ const router = createRouter({
 			component: Login,
 		},
 	],
+});
+router.beforeEach((to, from) => {
+	if (to.path === "/login") return true;
+	const { userInfo } = storeToRefs(useUserInfoStore());
+	if (!userInfo.value.token) {
+		router.push("/login");
+	}
+	return true;
 });
 
 export default router;

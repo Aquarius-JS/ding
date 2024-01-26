@@ -9,7 +9,7 @@
 	});
 	const getDepartments = async () => {
 		let res = await DepartmentAPI.getAll();
-		deparments.value = res.data.data;
+		deparments.value = res.data;
 	};
 	const delHandle = async id => {
 		let res = await DepartmentAPI.delById(id);

@@ -3,7 +3,7 @@ export const PriceControlAPI = {
 	getByOpts(data) {
 		return request({
 			method: "POST",
-			url: "/price_control_standards",
+			url: "/price_control_standards/paging",
 			data: data,
 		});
 	},
@@ -30,4 +30,17 @@ export const PriceControlAPI = {
 			data: data,
 		});
 	},
+	delAll(){
+		return request({
+			method: "POST",
+			url: "/del/all/price_control_standards",
+		});
+	},
+	batchAdd(data){
+		return request({
+			method:"POST",
+			url:"/update/batch/price_control_standards",
+			data: data
+		})
+	}
 };

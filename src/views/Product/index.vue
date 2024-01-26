@@ -11,19 +11,9 @@
 	const name = ref("");
 	const isLoading = ref(false);
 	const fileInputRef = ref();
-	const rowDataTemplate = ref({
-		dialogVisible: false,
-		isAdd: true,
-		id: "111",
-		name: "11",
-		financial_costs: 0,
-		cost: 10,
-		weight: 0,
-		v: 0,
-	});
 	const computedProList = computed(
 		() => {
-			if (name.value === "") return productList.value.data;
+			if (name.value === "") return productList.value;
 			return productList.value.data.filter(item => {
 				return item.name.includes(name.value);
 			});
@@ -36,7 +26,7 @@
 		isLoading.value = true;
 		const res = await ProductAPI.getAll();
 		productList.value = res.data;
-		console.log(productList.value.data);
+		console.log(productList.value)
 		isLoading.value = false;
 	};
 	const delHandle = async id => {
