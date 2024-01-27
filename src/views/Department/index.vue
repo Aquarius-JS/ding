@@ -19,7 +19,6 @@
 				message:"删除成功"
 			})
 		}
-		console.log(res);
 		getDepartments();
 	};
 	const addHandle = () => {
@@ -27,7 +26,6 @@
 	};
 	const confirmHandle = async () => {
 		let res = await DepartmentAPI.add({ department_name: diaLogData.value.department_name });
-		console.log(res);
 		if(res.statusText === "OK"){
 			ElMessage({
 				type:"success",

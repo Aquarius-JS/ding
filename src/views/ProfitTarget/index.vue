@@ -48,7 +48,6 @@
 		await getAll();
 	};
 	const updateHandle = async e => {
-		console.log(e.row)
 		const data = {
 			...e.row,
 			_X_ROW_KEY: undefined,

@@ -6,11 +6,9 @@
 	import { useRouter } from "vue-router";
 	const router = useRouter();
 	const { userInfo } = storeToRefs(useUserInfoStore());
-	console.log(userInfo.value);
 	onMounted(async () => {
 		const res = await UserAPI.login({ username: "a", password: "123" });
 		const data = res.data;
-		console.log(res)
 		if (data === "登录失败") {
 			ElMessage({
 				type: "warning",

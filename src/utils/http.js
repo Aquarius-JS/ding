@@ -16,7 +16,6 @@ httpInstance.interceptors.request.use(
 		const { userInfo } = storeToRefs(useUserInfoStore());
 		if (userInfo.value.token) {
 			config.headers.token = userInfo.value.token;
-			console.log(userInfo.value);
 		}
 		return config;
 	},
@@ -27,7 +26,7 @@ httpInstance.interceptors.response.use(
 	res => res.data,
 	e => {
 		//401
-		if(e.response.status === 401){
+		if (e.response.status === 401) {
 			const { userInfo } = storeToRefs(useUserInfoStore());
 			userInfo.value = {};
 			ElMessage({
@@ -35,13 +34,14 @@ httpInstance.interceptors.response.use(
 				message: "登录过期,请重新登录",
 			});
 			router.push("/login");
-			return
+		} else {
+			//统一错误提示
+			ElMessage({
+				type: "warning",
+				message: e.response.data.message,
+			});
 		}
-		//统一错误提示
-		ElMessage({
-			type: "warning",
-			message: e.response.data.message,
-		});
+
 		return Promise.reject(e);
 	}
 );

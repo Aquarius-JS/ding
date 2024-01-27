@@ -26,7 +26,6 @@
 		isLoading.value = true;
 		const res = await ProductAPI.getAll();
 		productList.value = res.data;
-		console.log(productList.value)
 		isLoading.value = false;
 	};
 	const delHandle = async id => {
