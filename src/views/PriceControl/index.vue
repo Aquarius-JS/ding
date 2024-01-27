@@ -18,7 +18,7 @@
 	const currentproduct = ref("");
 	const page = ref(10);
 	const pageNum = ref(1);
-	const count = ref(0);
+	const count = ref();
 	const isLoading = ref(false);
 	const fileInputRef = ref();
 
@@ -33,7 +33,9 @@
 			pageNum: pageNum.value,
 		});
 		priceControlList.value = res.data;
-		count.value = res.count;
+		if (pageNum.value === 1) {
+			count.value = res.count;
+		}
 		isLoading.value = false;
 	};
 	const init = async () => {
@@ -81,11 +83,18 @@
 			product: item["产品"],
 			control_price: item["控价(元)"] * 1,
 		}));
-		let index = 0;
 		await PriceControlAPI.delAll();
 		await PriceControlAPI.batchAdd(data);
+		await getByOpts();
 		isLoading.value = false;
 		fileInputRef.value = null;
+	};
+	const currentChangeHandler = _pageNum => {
+		pageNum.value = _pageNum;
+		getByOpts();
+	};
+	const sizeChangeHandler = _page => {
+		page.value = _page;
 		getByOpts();
 	};
 	onMounted(async () => {
@@ -97,7 +106,7 @@
 <template>
 	<div class="price_control">
 		<div class="header">
-			<el-select v-model="currentPriceSystem" placeholder="请选择价格体系">
+			<el-select v-model="currentPriceSystem" placeholder="请选择价格体系" @change="getByOpts">
 				<el-option label="全部" value="" />
 				<el-option
 					v-for="item in priceSystems"
@@ -106,7 +115,7 @@
 					:value="item.price_system_name"
 				/>
 			</el-select>
-			<el-select v-model="currentDepartment" placeholder="请选择部门">
+			<el-select v-model="currentDepartment" placeholder="请选择部门" @change="getByOpts">
 				<el-option label="全部" value="" />
 				<el-option
 					v-for="item in departments"
@@ -115,7 +124,7 @@
 					:value="item.department_name"
 				/>
 			</el-select>
-			<el-select v-model="currentPlatForm" placeholder="请选择平台">
+			<el-select v-model="currentPlatForm" placeholder="请选择平台" @change="getByOpts">
 				<el-option label="全部" value="" />
 				<el-option
 					v-for="item in platforms"
@@ -124,7 +133,7 @@
 					:value="item.platform_name"
 				/>
 			</el-select>
-			<el-select v-model="currentproduct" filterable placeholder="请选择商品">
+			<el-select v-model="currentproduct" filterable placeholder="请选择商品" @change="getByOpts">
 				<el-option label="全部" value="" />
 				<el-option
 					v-for="item in products"
@@ -133,7 +142,6 @@
 					:value="item.name"
 				/>
 			</el-select>
-			<el-button type="primary" :icon="Search" @click="getByOpts" />
 			<el-button type="primary" @click="">新增</el-button>
 			<input type="file" ref="fileInputRef" />
 			<el-button type="primary" plain @click="uploadExcel">
@@ -218,6 +226,17 @@
 					</vxe-column>
 				</vxe-table>
 			</div>
+			<div class="pagination_container">
+				<el-pagination
+					v-model:current-page="pageNum"
+					v-model:page-size="page"
+					layout="prev, pager, next, sizes, total"
+					:page-sizes="[10, 20, 50, 100]"
+					:total="count"
+					@size-change="sizeChangeHandler"
+					@current-change="currentChangeHandler"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -236,6 +255,9 @@
 		.main {
 			.table-container {
 				height: 70vh;
+			}
+			.pagination_container{
+				padding-top: 10px;
 			}
 		}
 	}
