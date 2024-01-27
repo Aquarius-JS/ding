@@ -12,32 +12,30 @@
 		deparments.value = res.data;
 	};
 	const delHandle = async id => {
-		let res = await DepartmentAPI.delById(id);
-		if(res.statusText === "OK"){
-			ElMessage({
-				type:"success",
-				message:"删除成功"
-			})
-		}
-		getDepartments();
+		await DepartmentAPI.delById(id);
+		await getDepartments();
+		ElMessage({
+			type: "success",
+			message: "删除成功",
+		});
 	};
 	const addHandle = () => {
 		diaLogData.value.dialogVisible = true;
 	};
 	const confirmHandle = async () => {
 		let res = await DepartmentAPI.add({ department_name: diaLogData.value.department_name });
-		if(res.statusText === "OK"){
+		if (res.statusText === "OK") {
 			ElMessage({
-				type:"success",
-				message:"添加成功"
-			})
+				type: "success",
+				message: "添加成功",
+			});
 		}
 		getDepartments();
 		cancleHandle();
 	};
 	const cancleHandle = () => {
 		diaLogData.value.dialogVisible = false;
-		diaLogData.value.department_name = ""
+		diaLogData.value.department_name = "";
 	};
 	onMounted(() => {
 		getDepartments();
@@ -63,10 +61,7 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<el-dialog
-			v-model="diaLogData.dialogVisible"
-			width="30%"
-		>
+		<el-dialog v-model="diaLogData.dialogVisible" width="30%">
 			<template #default>
 				<el-form :model="diaLogData" label-width="100px">
 					<el-form-item label="名称">
@@ -85,9 +80,9 @@
 </template>
 
 <style scoped lang="scss">
-.department{
-	.header{
-		margin-bottom: 5px;
+	.department {
+		.header {
+			margin-bottom: 5px;
+		}
 	}
-}
 </style>

@@ -11,19 +11,15 @@
 	});
 	const getPlatformList = async () => {
 		let res = await PlatformAPI.getAll();
-		console.log(res.data.data);
 		platformlist.value = res.data;
 	};
 	const delHandle = async id => {
-		let res = await PlatformAPI.delById(id);
-		if (res.statusText === "OK") {
-			ElMessage({
-				type: "success",
-				message: "删除成功",
-			});
-		}
-		console.log(res);
-		getPlatformList();
+		await PlatformAPI.delById(id);
+		await getPlatformList();
+		ElMessage({
+			type: "success",
+			message: "删除成功",
+		});
 	};
 	const addHandle = () => {
 		diaLogData.value.dialogVisible = true;
@@ -43,7 +39,6 @@
 				platform_name: diaLogData.value.platform_name,
 				Platform_deduction_points: diaLogData.value.Platform_deduction_points * 0.01,
 			});
-			console.log(res);
 			if (res.statusText === "OK") {
 				ElMessage({
 					type: "success",
@@ -57,7 +52,6 @@
 				id: diaLogData.value.id,
 				Platform_deduction_points: diaLogData.value.Platform_deduction_points * 0.01,
 			});
-			console.log(res);
 			if (res.statusText === "OK") {
 				ElMessage({
 					type: "success",
@@ -122,10 +116,10 @@
 							v-model="diaLogData.Platform_deduction_points"
 							placeholder="输入平台扣点"
 						>
-                        <template #suffix>
-                            <span style="font-weight:600;color:black">%</span>
-                        </template>
-                        </el-input>
+							<template #suffix>
+								<span style="font-weight: 600; color: black">%</span>
+							</template>
+						</el-input>
 					</el-form-item>
 				</el-form>
 			</template>

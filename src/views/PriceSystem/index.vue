@@ -9,26 +9,23 @@
 	});
 	const getPriceSystem = async () => {
 		let res = await PriceSystemAPI.getAll();
-        console.log(res.data.data)
 		priceSystemlist.value = res.data;
 	};
 	const delHandle = async id => {
-		let res = await PriceSystemAPI.delById(id);
-		if (res.statusText === "OK") {
-			ElMessage({
-				type: "success",
-				message: "删除成功",
-			});
-		}
-		console.log(res);
-		getPriceSystem();
+		await PriceSystemAPI.delById(id);
+		await getPriceSystem();
+		ElMessage({
+			type: "success",
+			message: "删除成功",
+		});
 	};
 	const addHandle = () => {
 		diaLogData.value.dialogVisible = true;
 	};
 	const confirmHandle = async () => {
-		let res = await PriceSystemAPI.add({ price_system_name: diaLogData.value.price_system_name });
-		console.log(res);
+		let res = await PriceSystemAPI.add({
+			price_system_name: diaLogData.value.price_system_name,
+		});
 		if (res.statusText === "OK") {
 			ElMessage({
 				type: "success",
@@ -70,7 +67,10 @@
 			<template #default>
 				<el-form :model="diaLogData" label-width="100px">
 					<el-form-item label="名称">
-						<el-input v-model="diaLogData.price_system_name" placeholder="输入价格体系名称" />
+						<el-input
+							v-model="diaLogData.price_system_name"
+							placeholder="输入价格体系名称"
+						/>
 					</el-form-item>
 				</el-form>
 			</template>

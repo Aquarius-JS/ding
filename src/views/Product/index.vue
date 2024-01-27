@@ -29,12 +29,12 @@
 		isLoading.value = false;
 	};
 	const delHandle = async id => {
-		let res = await ProductAPI.delById(id);
+		await ProductAPI.delById(id);
+		await getAll();
 		ElMessage({
 			type: "success",
 			message: "删除成功",
 		});
-		getAll();
 	};
 	const addHandle = async () => {
 		await ProductAPI.addProduct({

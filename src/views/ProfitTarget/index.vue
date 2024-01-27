@@ -57,14 +57,12 @@
 		ProfitTargetAPI.update(data);
 	};
 	const delHandle = async id => {
-		const res = await ProfitTargetAPI.delById(id);
-		if (res.statusText === "OK") {
-			ElMessage({
-				type: "success",
-				message: "删除成功",
-			});
-			getAll();
-		}
+		await ProfitTargetAPI.delById(id);
+		await getAll();
+		ElMessage({
+			type: "success",
+			message: "删除成功",
+		});
 	};
 	const uploadExcel = async () => {
 		profitTargetList.value = [];

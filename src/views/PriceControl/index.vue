@@ -18,18 +18,9 @@
 	const currentproduct = ref("");
 	const page = ref(10);
 	const pageNum = ref(1);
+	const count = ref(0);
 	const isLoading = ref(false);
 	const fileInputRef = ref();
-	const diaLogData = ref({
-		dialogVisible: false,
-		isAdd: false,
-		id: "",
-		platform: "",
-		department: "",
-		product: "",
-		price_system_name: "",
-		control_price: "",
-	});
 
 	const getByOpts = async () => {
 		isLoading.value = true;
@@ -42,6 +33,7 @@
 			pageNum: pageNum.value,
 		});
 		priceControlList.value = res.data;
+		count.value = res.count;
 		isLoading.value = false;
 	};
 	const init = async () => {
@@ -54,17 +46,6 @@
 		res = await ProductAPI.getAll();
 		products.value = res.data;
 	};
-	const addHandle = () => {
-		diaLogData.value = {
-			dialogVisible: true,
-			isAdd: true,
-			platform: "",
-			department: "",
-			product: "",
-			price_system_name: "",
-			control_price: 0,
-		};
-	};
 	const updateHandle = async e => {
 		PriceControlAPI.update({
 			...e.row,
@@ -73,14 +54,12 @@
 		});
 	};
 	const delHandle = async id => {
-		let res = await PriceControlAPI.delById(id);
-		if (res.statusText === "OK") {
-			ElMessage({
-				type: "success",
-				message: "删除成功",
-			});
-			getByOpts();
-		}
+		await PriceControlAPI.delById(id);
+		await getByOpts();
+		ElMessage({
+			type: "success",
+			message: "删除成功",
+		});
 	};
 	const downLoadExcel = async () => {
 		const data = priceControlList.value.map(item => ({
@@ -106,7 +85,7 @@
 		await PriceControlAPI.delAll();
 		await PriceControlAPI.batchAdd(data);
 		isLoading.value = false;
-		fileInputRef.value = null
+		fileInputRef.value = null;
 		getByOpts();
 	};
 	onMounted(async () => {
@@ -155,7 +134,7 @@
 				/>
 			</el-select>
 			<el-button type="primary" :icon="Search" @click="getByOpts" />
-			<el-button type="primary" @click="addHandle">新增</el-button>
+			<el-button type="primary" @click="">新增</el-button>
 			<input type="file" ref="fileInputRef" />
 			<el-button type="primary" plain @click="uploadExcel">
 				<el-icon><Upload /></el-icon>
