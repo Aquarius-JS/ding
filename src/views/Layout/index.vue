@@ -71,7 +71,7 @@
 		}
 		.main {
 			padding: 0;
-			min-height: 85vh;
+			min-height: 92vh;
 			:deep(.el-card__body) {
 				// padding: 0;
 				min-height: 80vh;
