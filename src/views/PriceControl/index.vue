@@ -46,13 +46,13 @@
 	};
 	const init = async () => {
 		let res = await PlatformAPI.getAll();
-		platforms.value = res.data.data;
+		platforms.value = res.data;
 		res = await DepartmentAPI.getAll();
-		departments.value = res.data.data;
+		departments.value = res.data;
 		res = await PriceSystemAPI.getAll();
-		priceSystems.value = res.data.data;
+		priceSystems.value = res.data;
 		res = await ProductAPI.getAll();
-		products.value = res.data.data;
+		products.value = res.data;
 	};
 	const addHandle = () => {
 		diaLogData.value = {
@@ -66,7 +66,6 @@
 		};
 	};
 	const updateHandle = async e => {
-		console.log(e.row);
 		PriceControlAPI.update({
 			...e.row,
 			control_price: e.row.control_price * 1,
