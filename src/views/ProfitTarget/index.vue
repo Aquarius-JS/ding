@@ -98,13 +98,15 @@
 	<div class="profit_target">
 		<div class="header">
 			<el-button type="primary" @click="addHandle">新增</el-button>
-			<input type="file" ref="fileInputRef" />
-			<el-button type="primary" plain @click="uploadExcel">
-				<el-icon><Upload /></el-icon>
-			</el-button>
-			<el-button type="primary" plain @click="downLoadExcel">
-				<el-icon><Download /></el-icon>
-			</el-button>
+			<div>
+				<input type="file" ref="fileInputRef" />
+				<el-button type="primary" plain @click="uploadExcel">
+					<el-icon><Upload /></el-icon>
+				</el-button>
+				<el-button type="primary" plain @click="downLoadExcel">
+					<el-icon><Download /></el-icon>
+				</el-button>
+			</div>
 		</div>
 		<div class="main">
 			<div class="table-container">
@@ -194,6 +196,8 @@
 <style scoped lang="scss">
 	.header {
 		margin-bottom: 10px;
+		display: flex;
+		justify-content: space-between;
 	}
 	.main {
 		.table-container {

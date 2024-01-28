@@ -106,50 +106,62 @@
 <template>
 	<div class="price_control">
 		<div class="header">
-			<el-select v-model="currentPriceSystem" placeholder="请选择价格体系" @change="getByOpts">
-				<el-option label="全部" value="" />
-				<el-option
-					v-for="item in priceSystems"
-					:key="item.id"
-					:label="item.price_system_name"
-					:value="item.price_system_name"
-				/>
-			</el-select>
-			<el-select v-model="currentDepartment" placeholder="请选择部门" @change="getByOpts">
-				<el-option label="全部" value="" />
-				<el-option
-					v-for="item in departments"
-					:key="item.id"
-					:label="item.department_name"
-					:value="item.department_name"
-				/>
-			</el-select>
-			<el-select v-model="currentPlatForm" placeholder="请选择平台" @change="getByOpts">
-				<el-option label="全部" value="" />
-				<el-option
-					v-for="item in platforms"
-					:key="item.id"
-					:label="item.platform_name + ' ' + item.Platform_deduction_points"
-					:value="item.platform_name"
-				/>
-			</el-select>
-			<el-select v-model="currentproduct" filterable placeholder="请选择商品" @change="getByOpts">
-				<el-option label="全部" value="" />
-				<el-option
-					v-for="item in products"
-					:key="item.id"
-					:label="item.name"
-					:value="item.name"
-				/>
-			</el-select>
-			<el-button type="primary" @click="">新增</el-button>
-			<input type="file" ref="fileInputRef" />
-			<el-button type="primary" plain @click="uploadExcel">
-				<el-icon><Upload /></el-icon>
-			</el-button>
-			<el-button type="primary" plain @click="downLoadExcel">
-				<el-icon><Download /></el-icon>
-			</el-button>
+			<div class="filter">
+				<el-select
+					v-model="currentPriceSystem"
+					placeholder="请选择价格体系"
+					@change="getByOpts"
+				>
+					<el-option label="全部" value="" />
+					<el-option
+						v-for="item in priceSystems"
+						:key="item.id"
+						:label="item.price_system_name"
+						:value="item.price_system_name"
+					/>
+				</el-select>
+				<el-select v-model="currentDepartment" placeholder="请选择部门" @change="getByOpts">
+					<el-option label="全部" value="" />
+					<el-option
+						v-for="item in departments"
+						:key="item.id"
+						:label="item.department_name"
+						:value="item.department_name"
+					/>
+				</el-select>
+				<el-select v-model="currentPlatForm" placeholder="请选择平台" @change="getByOpts">
+					<el-option label="全部" value="" />
+					<el-option
+						v-for="item in platforms"
+						:key="item.id"
+						:label="item.platform_name + ' ' + item.Platform_deduction_points"
+						:value="item.platform_name"
+					/>
+				</el-select>
+				<el-select
+					v-model="currentproduct"
+					filterable
+					placeholder="请选择商品"
+					@change="getByOpts"
+				>
+					<el-option label="全部" value="" />
+					<el-option
+						v-for="item in products"
+						:key="item.id"
+						:label="item.name"
+						:value="item.name"
+					/>
+				</el-select>
+			</div>
+			<div class="excel-container">
+				<input type="file" ref="fileInputRef" />
+				<el-button type="primary" plain @click="uploadExcel">
+					<el-icon><Upload /></el-icon>
+				</el-button>
+				<el-button type="primary" plain @click="downLoadExcel">
+					<el-icon><Download /></el-icon>
+				</el-button>
+			</div>
 		</div>
 		<div class="main">
 			<div class="table-container">
@@ -246,8 +258,12 @@
 		.header {
 			margin-bottom: 10px;
 			display: flex;
-			justify-content: flex-start;
+			justify-content: space-between;
 			gap: 5px;
+			.filter{
+				display: flex;
+				gap: 5px;
+			}
 			:deep(.el-input__wrapper) {
 				width: 150px;
 			}
@@ -256,7 +272,7 @@
 			.table-container {
 				height: 70vh;
 			}
-			.pagination_container{
+			.pagination_container {
 				padding-top: 10px;
 			}
 		}
