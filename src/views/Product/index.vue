@@ -73,7 +73,7 @@
 		await getAll();
 	};
 	const downLoadExcel = async () => {
-		const data = productList.value.data.map(item => ({
+		const data = productList.value.map(item => ({
 			名称: item.name,
 			"财务成本(元)": item.financial_costs * 1,
 			"业务成本(元)": item.cost * 1,

@@ -33,7 +33,11 @@
 	const getAll = async () => {
 		isLoading.value = true;
 		const res = await ProfitTargetAPI.getAll();
-		profitTargetList.value = res.data;
+		profitTargetList.value = res.data.map(item => ({
+			...item,
+			financial_profit_target: item.financial_profit_target * 100,
+			profit_target: item.profit_target * 100,
+		}));
 		isLoading.value = false;
 	};
 	const addHandle = async () => {
@@ -51,8 +55,8 @@
 		const data = {
 			...e.row,
 			_X_ROW_KEY: undefined,
-			financial_profit_target: e.row.financial_profit_target * 1,
-			profit_target: e.row.profit_target * 1,
+			financial_profit_target: e.row.financial_profit_target * 0.01,
+			profit_target: e.row.profit_target * 0.01,
 		};
 		ProfitTargetAPI.update(data);
 	};
@@ -83,8 +87,8 @@
 			价格体系: item.price_system,
 			部门: item.department,
 			平台: item.platform,
-			"财务利润目标(%)": item.financial_profit_target * 100,
-			"业务利润目标(%)": item.profit_target * 100,
+			"财务利润目标(%)": item.financial_profit_target,
+			"业务利润目标(%)": item.profit_target,
 		}));
 		download(data, "利润目标信息");
 	};
@@ -150,10 +154,11 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column title="财务利润目标(%)" :edit-render="{}">
-						<template #default="{ row }">
-							<span>{{ row.financial_profit_target * 100 }}</span>
-						</template>
+					<vxe-column
+						field="financial_profit_target"
+						title="财务利润目标(%)"
+						:edit-render="{}"
+					>
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.financial_profit_target"
@@ -162,10 +167,7 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column title="业务利润目标(%)" :edit-render="{}">
-						<template #default="{ row }">
-							<span>{{ row.profit_target * 100 }}</span>
-						</template>
+					<vxe-column field="profit_target" title="业务利润目标(%)" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.profit_target"
