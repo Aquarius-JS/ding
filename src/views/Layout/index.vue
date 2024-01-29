@@ -31,6 +31,7 @@
 								</el-menu-item>
 								<el-sub-menu index="/other">
 									<template #title>其他</template>
+									<el-menu-item index="/logistics">物流管理</el-menu-item>
 									<el-menu-item index="/department">部门</el-menu-item>
 									<el-menu-item index="/platform">平台</el-menu-item>
 									<el-menu-item index="/price_system">价格体系</el-menu-item>

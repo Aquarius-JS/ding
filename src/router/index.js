@@ -7,6 +7,7 @@ import Platform from "@/views/Platform/index.vue";
 import ProfitTarget from "@/views/ProfitTarget/index.vue";
 import PriceControl from "@/views/PriceControl/index.vue";
 import Login from "@/views/Login/index.vue";
+import Logistics from "@/views/Logistics/index.vue";
 import { storeToRefs } from "pinia";
 import { useUserInfoStore } from "@/stores/user";
 
@@ -26,24 +27,28 @@ const router = createRouter({
 					component: Product,
 				},
 				{
-					path: "/department",
+					path: "department",
 					component: Department,
 				},
 				{
-					path: "/price_system",
+					path: "price_system",
 					component: PriceSystem,
 				},
 				{
-					path: "/platform",
+					path: "platform",
 					component: Platform,
 				},
 				{
-					path: "/profit_target",
+					path: "profit_target",
 					component: ProfitTarget,
 				},
 				{
-					path: "/price_control",
+					path: "price_control",
 					component: PriceControl,
+				},
+				{
+					path: "logistics",
+					component: Logistics,
 				},
 			],
 		},
