@@ -7,7 +7,7 @@ const LogisticsAPI = {
 			url: "/physical/distribution/management",
 		});
 	},
-	updata(data) {
+	update(data) {
 		return request({
 			method: "POST",
 			url: "/update/physical/distribution/management",
@@ -15,3 +15,5 @@ const LogisticsAPI = {
 		});
 	},
 };
+
+export default LogisticsAPI;

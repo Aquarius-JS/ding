@@ -12,7 +12,6 @@ export const download = (json_data, file_name = "数据") => {
 };
 
 export const upload = files => {
-			console.log(files);
 	if (!files[0]) {
 		ElMessage({
 			type: "warning",
