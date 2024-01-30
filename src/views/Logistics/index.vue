@@ -12,11 +12,13 @@
 	};
 	const updateHandle = async e => {
 		isLoading.value = true;
-		const data = e.row;
-		const numData = data.map(item => item * 1);
+		const obj = {};
+		Object.entries(e.row).forEach(item => (obj[item[0]] = item[1] * 1));
+		console.log(obj);
 		await LogisticsAPI.update({
-			...numData,
-			name: data.name,
+			...obj,
+			id: e.row.id,
+			name: e.row.name,
 			_X_ROW_KEY: undefined,
 		});
 		await getAll();
