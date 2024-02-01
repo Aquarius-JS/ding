@@ -5,7 +5,7 @@
 	import { DepartmentAPI } from "@/apis/department";
 	import { PlatformAPI } from "@/apis/platform";
 	import { onMounted, ref } from "vue";
-	import { download, upload } from "@/utils/xlsx";
+	import { download, downloadTemplate, upload } from "@/utils/xlsx";
 
 	const isLoading = ref(false);
 	const fileInputRef = ref();
@@ -13,15 +13,6 @@
 	const priceSystemList = ref([]);
 	const departmentList = ref([]);
 	const platformList = ref([]);
-	const diaLogDate = ref({
-		dialogVisible: false,
-		isAdd: true,
-		id: "",
-		price_system: "",
-		department: "",
-		platform: "",
-		profit_target: 0,
-	});
 	const init = async () => {
 		let priceRes = await PriceSystemAPI.getAll();
 		priceSystemList.value = priceRes.data.data;
@@ -46,6 +37,7 @@
 			price_system: "",
 			department: "",
 			platform: "",
+			category: "",
 			financial_profit_target: 0,
 			profit_target: 0,
 		});
@@ -76,6 +68,7 @@
 			price_system: item["价格体系"],
 			department: item["部门"],
 			platform: item["平台"],
+			category: item["类别"],
 			financial_profit_target: item["财务利润目标(%)"] * 0.01,
 			profit_target: item["业务利润目标(%)"] * 0.01,
 		}));
@@ -87,6 +80,7 @@
 			价格体系: item.price_system,
 			部门: item.department,
 			平台: item.platform,
+			类别: item.category,
 			"财务利润目标(%)": item.financial_profit_target,
 			"业务利润目标(%)": item.profit_target,
 		}));
@@ -109,7 +103,22 @@
 				</el-button>
 				<el-button type="primary" plain @click="downLoadExcel">
 					<el-icon><Download /></el-icon>
+					下载数据
 				</el-button>
+				<el-button
+					type="primary"
+					@click="
+						downloadTemplate([
+							'价格体系',
+							'部门',
+							'平台',
+							'类别',
+							'财务利润目标(%)',
+							'业务利润目标(%)',
+						],'利润目标信息(模板)')
+					"
+					>下载模板</el-button
+				>
 			</div>
 		</div>
 		<div class="main">
@@ -151,6 +160,15 @@
 								v-model="row.platform"
 								type="text"
 								placeholder="请输入平台"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="category" title="类别" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.category"
+								type="text"
+								placeholder="请输入类别"
 							></vxe-input>
 						</template>
 					</vxe-column>

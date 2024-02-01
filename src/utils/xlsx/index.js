@@ -33,7 +33,7 @@ export const upload = files => {
 	});
 };
 
-export const downloadTemplate = async arr => {
+export const downloadTemplate = async (arr, fileName) => {
 	// 创建一个工作簿
 	const workbook = XLSX.utils.book_new();
 
@@ -44,5 +44,5 @@ export const downloadTemplate = async arr => {
 	XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
 	// 将工作簿保存为Excel文件
-	XLSX.writeFile(workbook, "产品基本信息(模板).xlsx");
+	XLSX.writeFile(workbook, fileName + ".xlsx");
 };
