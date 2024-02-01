@@ -1,13 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Product from "@/views/Product/index.vue";
-import Layout from "@/views/Layout/index.vue";
-import Department from "@/views/Department/index.vue";
-import PriceSystem from "@/views/PriceSystem/index.vue";
-import Platform from "@/views/Platform/index.vue";
-import ProfitTarget from "@/views/ProfitTarget/index.vue";
-import PriceControl from "@/views/PriceControl/index.vue";
-import Login from "@/views/Login/index.vue";
-import Logistics from "@/views/Logistics/index.vue";
 import { storeToRefs } from "pinia";
 import { useUserInfoStore } from "@/stores/user";
 
@@ -16,7 +7,7 @@ const router = createRouter({
 	routes: [
 		{
 			path: "/",
-			component: Layout,
+			component: () => import("@/views/Layout/index.vue"),
 			children: [
 				{
 					path: "",
@@ -24,37 +15,37 @@ const router = createRouter({
 				},
 				{
 					path: "product",
-					component: Product,
+					component: () => import("@/views/Product/index.vue"),
 				},
 				{
 					path: "department",
-					component: Department,
+					component: () => import("@/views/Department/index.vue"),
 				},
 				{
 					path: "price_system",
-					component: PriceSystem,
+					component: () => import("@/views/PriceSystem/index.vue"),
 				},
 				{
 					path: "platform",
-					component: Platform,
+					component: () => import("@/views/Platform/index.vue"),
 				},
 				{
 					path: "profit_target",
-					component: ProfitTarget,
+					component: () => import("@/views/ProfitTarget/index.vue"),
 				},
 				{
 					path: "price_control",
-					component: PriceControl,
+					component: () => import("@/views/PriceControl/index.vue"),
 				},
 				{
 					path: "logistics",
-					component: Logistics,
+					component: () => import("@/views/Logistics/index.vue"),
 				},
 			],
 		},
 		{
 			path: "/login",
-			component: Login,
+			component: () => import("@/views/Login/index.vue"),
 		},
 	],
 });
