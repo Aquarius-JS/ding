@@ -4,7 +4,7 @@
 	import { ProductAPI } from "../../apis/product";
 	import { useProductStore } from "@/stores/product";
 	import { Upload, Download } from "@element-plus/icons-vue";
-	import { upload, download } from "@/utils/xlsx/index";
+	import { upload, download, downloadTemplate } from "@/utils/xlsx/index";
 	import { storeToRefs } from "pinia";
 	const { productList } = storeToRefs(useProductStore());
 	// 过滤条件name
@@ -15,7 +15,11 @@
 		() => {
 			if (name.value === "") return productList.value;
 			return productList.value.filter(item => {
-				return item.name.includes(name.value);
+				return (
+					item.name?.includes(name.value) ||
+					item.category?.includes(name.value) ||
+					item.num?.includes(name.value)
+				);
 			});
 		},
 		{
@@ -38,7 +42,9 @@
 	};
 	const addHandle = async () => {
 		await ProductAPI.addProduct({
+			category: "(类别)",
 			name: "(产品名称)",
+			num: "(编码)",
 			financial_costs: 0,
 			cost: 0,
 			weight: 0,
@@ -51,7 +57,9 @@
 		isLoading.value = true;
 		await ProductAPI.updateProduct({
 			id: data.id,
+			category: data.category,
 			name: data.name,
+			num: data.num,
 			financial_costs: data.financial_costs * 1,
 			cost: data.cost * 1,
 			weight: data.weight * 1,
@@ -61,8 +69,11 @@
 	};
 	const uploadExcel = async () => {
 		const res = await upload(fileInputRef.value.files);
+		if (!res) return;
 		const data = res.map(item => ({
+			category: item["类别"],
 			name: item["名称"],
+			num: item["编码"],
 			financial_costs: item["财务成本(元)"] * 1,
 			cost: item["业务成本(元)"] * 1,
 			weight: item["重量(g)"] * 1,
@@ -74,7 +85,9 @@
 	};
 	const downLoadExcel = async () => {
 		const data = productList.value.map(item => ({
+			类别: item.category,
 			名称: item.name,
+			编码: item.num,
 			"财务成本(元)": item.financial_costs * 1,
 			"业务成本(元)": item.cost * 1,
 			"重量(g)": item.weight * 1,
@@ -93,7 +106,7 @@
 			<div class="handle">
 				<el-input
 					v-model="name"
-					placeholder="名称模糊查询"
+					placeholder="类别/名称/编码 模糊查询"
 					clearable
 					style="width: 200px; margin: 0 10px"
 				/>
@@ -106,7 +119,23 @@
 				</el-button>
 				<el-button type="primary" plain @click="downLoadExcel">
 					<el-icon><Download /></el-icon>
+					下载数据
 				</el-button>
+				<el-button
+					type="primary"
+					@click="
+						downloadTemplate([
+							'类别',
+							'名称',
+							'编码',
+							'财务成本(元)',
+							'业务成本(元)',
+							'重量(g)',
+							'体积(cm³)',
+						])
+					"
+					>下载模板</el-button
+				>
 			</div>
 		</div>
 		<div class="main">
@@ -124,12 +153,30 @@
 					:edit-config="{ trigger: 'dblclick', mode: 'row' }"
 					@edit-closed="updateHandle"
 				>
+					<vxe-column field="category" title="类别" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.category"
+								type="text"
+								placeholder="请输入类别"
+							></vxe-input>
+						</template>
+					</vxe-column>
 					<vxe-column field="name" title="名称" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.name"
 								type="text"
 								placeholder="请输入名称"
+							></vxe-input>
+						</template>
+					</vxe-column>
+					<vxe-column field="num" title="编码" :edit-render="{}">
+						<template #edit="{ row }">
+							<vxe-input
+								v-model="row.num"
+								type="text"
+								placeholder="请输入编码"
 							></vxe-input>
 						</template>
 					</vxe-column>
@@ -195,7 +242,7 @@
 			justify-content: space-between;
 			align-items: center;
 			margin-bottom: 10px;
-			.handle{
+			.handle {
 				display: flex;
 				align-items: center;
 				gap: 5px;
