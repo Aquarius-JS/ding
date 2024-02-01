@@ -68,7 +68,7 @@
 			price_system: item["价格体系"],
 			department: item["部门"],
 			platform: item["平台"],
-			category: item["类别"],
+			category: item["大类"],
 			financial_profit_target: item["财务利润目标(%)"] * 0.01,
 			profit_target: item["业务利润目标(%)"] * 0.01,
 		}));
@@ -80,7 +80,7 @@
 			价格体系: item.price_system,
 			部门: item.department,
 			平台: item.platform,
-			类别: item.category,
+			大类: item.category,
 			"财务利润目标(%)": item.financial_profit_target,
 			"业务利润目标(%)": item.profit_target,
 		}));
@@ -112,7 +112,7 @@
 							'价格体系',
 							'部门',
 							'平台',
-							'类别',
+							'大类',
 							'财务利润目标(%)',
 							'业务利润目标(%)',
 						],'利润目标信息(模板)')
@@ -163,12 +163,12 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="category" title="类别" :edit-render="{}">
+					<vxe-column field="category" title="大类" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.category"
 								type="text"
-								placeholder="请输入类别"
+								placeholder="请输入大类"
 							></vxe-input>
 						</template>
 					</vxe-column>

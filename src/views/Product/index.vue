@@ -42,7 +42,7 @@
 	};
 	const addHandle = async () => {
 		await ProductAPI.addProduct({
-			category: "(类别)",
+			category: "(大类)",
 			name: "(产品名称)",
 			num: "(编码)",
 			financial_costs: 0,
@@ -71,7 +71,7 @@
 		const res = await upload(fileInputRef.value.files);
 		if (!res) return;
 		const data = res.map(item => ({
-			category: item["类别"],
+			category: item["大类"],
 			name: item["名称"],
 			num: item["编码"],
 			financial_costs: item["财务成本(元)"] * 1,
@@ -85,7 +85,7 @@
 	};
 	const downLoadExcel = async () => {
 		const data = productList.value.map(item => ({
-			类别: item.category,
+			大类: item.category,
 			名称: item.name,
 			编码: item.num,
 			"财务成本(元)": item.financial_costs * 1,
@@ -106,7 +106,7 @@
 			<div class="handle">
 				<el-input
 					v-model="name"
-					placeholder="类别/名称/编码 模糊查询"
+					placeholder="大类/名称/编码 模糊查询"
 					clearable
 					style="width: 200px; margin: 0 10px"
 				/>
@@ -125,7 +125,7 @@
 					type="primary"
 					@click="
 						downloadTemplate([
-							'类别',
+							'大类',
 							'名称',
 							'编码',
 							'财务成本(元)',
@@ -153,12 +153,12 @@
 					:edit-config="{ trigger: 'dblclick', mode: 'row' }"
 					@edit-closed="updateHandle"
 				>
-					<vxe-column field="category" title="类别" :edit-render="{}">
+					<vxe-column field="category" title="大类" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.category"
 								type="text"
-								placeholder="请输入类别"
+								placeholder="请输入大类"
 							></vxe-input>
 						</template>
 					</vxe-column>
