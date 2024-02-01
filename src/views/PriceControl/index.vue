@@ -5,8 +5,8 @@
 	import { ProductAPI } from "@/apis/product";
 	import { PriceControlAPI } from "@/apis/priceControl";
 	import { onMounted, ref } from "vue";
-	import { Upload, Download, Search } from "@element-plus/icons-vue";
-	import { upload, download } from "@/utils/xlsx/index";
+	import { Upload, Download } from "@element-plus/icons-vue";
+	import { upload, download, downloadTemplate } from "@/utils/xlsx/index";
 	const platforms = ref([]);
 	const departments = ref([]);
 	const priceSystems = ref([]);
@@ -68,7 +68,7 @@
 			价格体系: item.price_system_name,
 			部门: item.department,
 			平台: item.platform,
-			产品: item.product,
+			大类: item.category,
 			"控价(元)": item.control_price * 1,
 		}));
 		download(data, "控价标准");
@@ -80,7 +80,7 @@
 			price_system_name: item["价格体系"],
 			department: item["部门"],
 			platform: item["平台"],
-			product: item["产品"],
+			category: item["大类"],
 			control_price: item["控价(元)"] * 1,
 		}));
 		await PriceControlAPI.delAll();
@@ -161,6 +161,16 @@
 				<el-button type="primary" plain @click="downLoadExcel">
 					<el-icon><Download /></el-icon>
 				</el-button>
+				<el-button
+					type="primary"
+					@click="
+						downloadTemplate(
+							['价格体系', '部门', '平台', '大类', '控价(元)'],
+							'控价标准(模板)'
+						)
+					"
+					>下载模板</el-button
+				>
 			</div>
 		</div>
 		<div class="main">
@@ -205,12 +215,12 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="product" title="产品" :edit-render="{}">
+					<vxe-column field="category" title="大类" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
-								v-model="row.product"
+								v-model="row.category"
 								type="text"
-								placeholder="请输入财务利润目标"
+								placeholder="请输入大类"
 							></vxe-input>
 						</template>
 					</vxe-column>
@@ -260,7 +270,7 @@
 			display: flex;
 			justify-content: space-between;
 			gap: 5px;
-			.filter{
+			.filter {
 				display: flex;
 				gap: 5px;
 			}
