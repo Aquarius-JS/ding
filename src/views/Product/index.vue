@@ -76,7 +76,7 @@
 			num: item["编码"],
 			financial_costs: item["财务成本(元)"] * 1,
 			cost: item["业务成本(元)"] * 1,
-			weight: item["重量(g)"] * 1,
+			weight: item["重量(kg)"] * 1,
 			v: item["体积(cm³)"] * 1,
 		}));
 		isLoading.value = true;
@@ -90,7 +90,7 @@
 			编码: item.num,
 			"财务成本(元)": item.financial_costs * 1,
 			"业务成本(元)": item.cost * 1,
-			"重量(g)": item.weight * 1,
+			"重量(kg)": item.weight * 1,
 			"体积(cm³)": item.v * 1,
 		}));
 		download(data, "产品基本信息");
@@ -130,7 +130,7 @@
 							'编码',
 							'财务成本(元)',
 							'业务成本(元)',
-							'重量(g)',
+							'重量(kg)',
 							'体积(cm³)',
 						],'产品基本信息(模板)')
 					"
@@ -198,7 +198,7 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="weight" title="重量(g)" :edit-render="{}">
+					<vxe-column field="weight" title="重量(kg)" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
 								v-model="row.weight"
