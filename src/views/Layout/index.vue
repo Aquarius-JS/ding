@@ -1,6 +1,7 @@
 <script setup>
 	import { onMounted, ref } from "vue";
 	import { useRouter, useRoute } from "vue-router";
+	import Header from "@/components/Header/index.vue";
 	const router = useRouter();
 	const route = useRoute();
 	const path = ref("");
@@ -13,7 +14,9 @@
 	<div class="layout">
 		<el-container>
 			<el-header>
-				<div class="header"></div>
+				<div class="header">
+					<Header></Header>
+				</div>
 			</el-header>
 			<el-container>
 				<el-aside width="200px">
@@ -58,6 +61,10 @@
 		:deep(.el-main) {
 			padding: 0px 3px;
 		}
+		:deep(.el-header) {
+			padding: 0;
+			margin-bottom: 3px;
+		}
 		.aside {
 			padding: 0;
 			:deep(.el-card__body) {
@@ -66,13 +73,13 @@
 			:deep(.el-menu-item) {
 				justify-content: space-around;
 			}
-			:deep(.el-sub-menu__title){
+			:deep(.el-sub-menu__title) {
 				justify-content: center;
 			}
 		}
 		.main {
 			padding: 0;
-			min-height: 92vh;
+			min-height: 91vh;
 			:deep(.el-card__body) {
 				// padding: 0;
 				min-height: 80vh;
