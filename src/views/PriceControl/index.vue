@@ -7,6 +7,7 @@
 	import { onMounted, ref } from "vue";
 	import { Upload, Download } from "@element-plus/icons-vue";
 	import { upload, download, downloadTemplate } from "@/utils/xlsx/index";
+	import { uniqBy } from "lodash";
 	const platforms = ref([]);
 	const departments = ref([]);
 	const priceSystems = ref([]);
@@ -28,7 +29,7 @@
 			platform: currentPlatForm.value || undefined,
 			department: currentDepartment.value || undefined,
 			price_system_name: currentPriceSystem.value || undefined,
-			product: currentproduct.value || undefined,
+			category: currentproduct.value || undefined,
 			page: page.value,
 			pageNum: pageNum.value,
 		});
@@ -46,7 +47,8 @@
 		res = await PriceSystemAPI.getAll();
 		priceSystems.value = res.data;
 		res = await ProductAPI.getAll();
-		products.value = res.data;
+		console.log(res.data);
+		products.value = uniqBy(res.data, "category");
 	};
 	const updateHandle = async e => {
 		PriceControlAPI.update({
@@ -148,8 +150,8 @@
 					<el-option
 						v-for="item in products"
 						:key="item.id"
-						:label="item.name"
-						:value="item.name"
+						:label="item.category"
+						:value="item.category"
 					/>
 				</el-select>
 			</div>
