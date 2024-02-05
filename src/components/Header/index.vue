@@ -6,7 +6,7 @@
 	const { userInfo } = storeToRefs(useUserInfoStore());
 	const router = useRouter();
 	const loginOut = () => {
-		localStorage.removeItem("user");
+		localStorage.removeItem("userInfo");
 		router.push("/login");
 	};
 </script>
