@@ -36,6 +36,7 @@
 						type: "success",
 						message: "登录成功",
 					});
+					userInfo.value.name = ruleForm.value.userName;
 					router.push({ path: "/" });
 				}
 			} else return false;

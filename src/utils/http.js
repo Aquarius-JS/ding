@@ -26,7 +26,7 @@ httpInstance.interceptors.response.use(
 	res => res.data,
 	e => {
 		//401
-		if (e.response.status === 401) {
+		if (e.response?.status === 401) {
 			const { userInfo } = storeToRefs(useUserInfoStore());
 			userInfo.value = {};
 			ElMessage({
