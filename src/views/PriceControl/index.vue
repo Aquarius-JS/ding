@@ -66,7 +66,9 @@
 		});
 	};
 	const downLoadExcel = async () => {
-		const data = priceControlList.value.map(item => ({
+		const priceControlList = await PriceControlAPI.getAll();
+		console.log(priceControlList.data);
+		const data = priceControlList?.data.map(item => ({
 			价格体系: item.price_system_name,
 			部门: item.department,
 			平台: item.platform,
@@ -162,6 +164,7 @@
 				</el-button>
 				<el-button type="primary" plain @click="downLoadExcel">
 					<el-icon><Download /></el-icon>
+					下载数据
 				</el-button>
 				<el-button
 					type="primary"

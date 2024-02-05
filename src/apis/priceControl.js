@@ -1,5 +1,11 @@
 import request from "@/utils/http";
 export const PriceControlAPI = {
+	getAll() {
+		return request({
+			method: "GET",
+			url: "/all/price_control_standards",
+		});
+	},
 	getByOpts(data) {
 		return request({
 			method: "POST",
@@ -30,17 +36,17 @@ export const PriceControlAPI = {
 			data: data,
 		});
 	},
-	delAll(){
+	delAll() {
 		return request({
 			method: "POST",
 			url: "/del/all/price_control_standards",
 		});
 	},
-	batchAdd(data){
+	batchAdd(data) {
 		return request({
-			method:"POST",
-			url:"/update/batch/price_control_standards",
-			data: data
-		})
-	}
+			method: "POST",
+			url: "/update/batch/price_control_standards",
+			data: data,
+		});
+	},
 };
