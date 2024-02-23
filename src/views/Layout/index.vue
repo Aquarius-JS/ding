@@ -32,6 +32,9 @@
 								<el-menu-item index="/price_control">
 									<span>控价标准</span>
 								</el-menu-item>
+								<el-menu-item index="/frontlog">
+									<span>查询日志</span>
+								</el-menu-item>
 								<el-sub-menu index="/other">
 									<template #title>其他</template>
 									<el-menu-item index="/logistics">物流管理</el-menu-item>

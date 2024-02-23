@@ -41,6 +41,10 @@ const router = createRouter({
 					path: "logistics",
 					component: () => import("@/views/Logistics/index.vue"),
 				},
+				{
+					path: "frontlog",
+					component: () => import("@/views/FrontLog/index.vue"),
+				},
 			],
 		},
 		{
