@@ -25,6 +25,3 @@ export const format = date => {
 function addZero(num) {
 	return num < 10 ? "0" + num : num;
 }
-let timestamp = 1619569282000; // 举例一个时间戳
-let datetime = format(timestamp);
-console.log(datetime);

@@ -1,16 +1,35 @@
 <script setup>
 	import { ref, onMounted } from "vue";
 	import { FrontLogAPI } from "@/apis/frontLog";
+	import { ProductAPI } from "@/apis/product";
 	import { isEqual, round } from "lodash";
 	import { format } from "@/utils/date";
 	const page = ref(10);
 	const pageNum = ref(1);
 	const total = ref(0);
 	const logList = ref();
+	const productList = ref();
 	const getLogList = async () => {
 		const res = await FrontLogAPI.getAll({ page: page.value, pageNum: pageNum.value });
-		console.log(res);
 		logList.value = res.data;
+		console.log(res.data, "@@@");
+		logList.value = res.data.map(item => ({
+			...item,
+			res: {
+				...item.res,
+				giftProduct: item.res.giftProduct.map(gift => ({
+					...gift,
+					...productList.value.find(i => i.name === gift.name),
+					num: gift.num,
+				})),
+				product: item.res.product.map(product => ({
+					...product,
+					...productList.value.find(i => i.name === product.name),
+					num: product.num,
+				})),
+			},
+		}));
+		console.log(logList.value, "!!");
 		if (pageNum.value === 1) {
 			total.value = res.count;
 		}
@@ -23,8 +42,11 @@
 		page.value = _page;
 		getLogList();
 	};
-	onMounted(() => {
-		getLogList();
+	onMounted(async () => {
+		const res = await ProductAPI.getAll();
+		productList.value = res.data;
+		console.log(productList.value);
+		await getLogList();
 	});
 </script>
 
@@ -55,7 +77,7 @@
 							<el-divider direction="vertical" />
 							<span>
 								<span>费比佣金：</span>
-								<span>{{ row.res.feeRatio }} ￥</span>
+								<span>{{ round(row.res.feeRatio * 100, 2) }} %</span>
 							</span>
 							<el-divider direction="vertical" />
 							<span>
@@ -104,13 +126,17 @@
 							<el-table :data="row.res.product" border>
 								<el-table-column label="名称" prop="name" />
 								<el-table-column label="数量" prop="num" />
+								<el-table-column label="财务成本(￥)" prop="financial_costs" />
+								<el-table-column label="业务成本(￥)" prop="cost" />
 							</el-table>
 						</div>
 						<div v-if="row.res.giftProduct && !isEqual(row.res.giftProduct?.length, 0)">
 							<h4>赠品列表:</h4>
-							<el-table :data="row.res.product" border>
+							<el-table :data="row.res.giftProduct" border>
 								<el-table-column label="名称" prop="name" />
 								<el-table-column label="数量" prop="num" />
+								<el-table-column label="财务成本(￥)" prop="financial_costs" />
+								<el-table-column label="业务成本(￥)" prop="cost" />
 							</el-table>
 						</div>
 						<div
@@ -120,10 +146,10 @@
 							"
 						>
 							<h4>特殊配赠列表:</h4>
-							<el-table :data="row.res.product" border>
+							<el-table :data="row.res.specialProduct" border>
 								<el-table-column label="名称" prop="name" />
 								<el-table-column label="数量" prop="num" />
-								<el-table-column label="价格" prop="cost" />
+								<el-table-column label="价格(￥)" prop="cost" />
 							</el-table>
 						</div>
 					</div>

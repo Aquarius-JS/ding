@@ -29,6 +29,7 @@
 	const getAll = async () => {
 		isLoading.value = true;
 		const res = await ProductAPI.getAll();
+		console.log(res);
 		productList.value = res.data;
 		isLoading.value = false;
 	};
@@ -180,19 +181,19 @@
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="cost" title="财务成本(元)" :edit-render="{}">
+					<vxe-column field="financial_costs" title="财务成本(元)" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
-								v-model="row.cost"
+								v-model="row.financial_costs"
 								type="text"
 								placeholder="请输入成本"
 							></vxe-input>
 						</template>
 					</vxe-column>
-					<vxe-column field="financial_costs" title="业务成本(元)" :edit-render="{}">
+					<vxe-column field="cost" title="业务成本(元)" :edit-render="{}">
 						<template #edit="{ row }">
 							<vxe-input
-								v-model="row.financial_costs"
+								v-model="row.cost"
 								type="text"
 								placeholder="请输入成本"
 							></vxe-input>
