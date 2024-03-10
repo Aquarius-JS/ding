@@ -1,7 +1,9 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { createI18n } from "vue-i18n";
 import { lazyPlugin } from "./directives";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import i18n from "./i18n/index";
 
 import App from "./App.vue";
 import router from "./router";
@@ -16,6 +18,13 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 app.use(lazyPlugin);
 app.use(pinia);
+app.use(
+	createI18n({
+		locale: "zh",
+		fallbackLocale: "en",
+        messages:i18n
+	})
+);
 app.use(router);
 app.use(VXETable);
 

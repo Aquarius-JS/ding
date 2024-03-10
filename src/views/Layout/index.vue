@@ -24,7 +24,7 @@
 						<el-card>
 							<el-menu :default-active="path" class="el-menu-vertical-demo" router>
 								<el-menu-item index="/product">
-									<span>产品基本信息</span>
+									<span>{{ $t("product.message") }}</span>
 								</el-menu-item>
 								<el-menu-item index="/profit_target">
 									<span>利润目标信息</span>
