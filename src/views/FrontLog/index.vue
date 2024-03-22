@@ -157,7 +157,7 @@
 			</el-table-column>
 			<el-table-column label="查询人员信息">
 				<template #default="{ row }">
-					<span>{{ row.name ?? 'unknown' }}</span>
+					<span>{{ row.res.name === "" ? "unknown" : row.res.name }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="查询时间">
