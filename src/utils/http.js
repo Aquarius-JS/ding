@@ -5,8 +5,9 @@ import "element-plus/theme-chalk/el-message.css";
 import { useUserInfoStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import router from "@/router";
+import { IP } from "@/config/httpConfig";
 const httpInstance = axios.create({
-	baseURL: "http://47.95.157.71:8888/api",
+	baseURL: `http:${IP}//:8888/api`,
 	timeout: 5000,
 });
 
