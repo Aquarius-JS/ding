@@ -6,6 +6,7 @@
 	import { PlatformAPI } from "@/apis/platform";
 	import { onMounted, ref } from "vue";
 	import { download, downloadTemplate, upload } from "@/utils/xlsx";
+	import Decimal from "decimal.js";
 
 	const isLoading = ref(false);
 	const fileInputRef = ref();
@@ -14,20 +15,22 @@
 	const departmentList = ref([]);
 	const platformList = ref([]);
 	const init = async () => {
+		isLoading.value = true;
 		let priceRes = await PriceSystemAPI.getAll();
 		priceSystemList.value = priceRes.data.data;
 		let deparRes = await DepartmentAPI.getAll();
 		departmentList.value = deparRes.data.data;
 		let platRes = await PlatformAPI.getAll();
 		platformList.value = platRes.data.data;
+		// isLoading.value = false;
 	};
 	const getAll = async () => {
 		isLoading.value = true;
 		const res = await ProfitTargetAPI.getAll();
 		profitTargetList.value = res.data.map(item => ({
 			...item,
-			financial_profit_target: item.financial_profit_target * 100,
-			profit_target: item.profit_target * 100,
+			financial_profit_target: new Decimal(item.financial_profit_target).mul(100).toNumber(),
+			profit_target: new Decimal(item.profit_target).mul(100).toNumber(),
 		}));
 		isLoading.value = false;
 	};
@@ -108,14 +111,17 @@
 				<el-button
 					type="primary"
 					@click="
-						downloadTemplate([
-							'价格体系',
-							'部门',
-							'平台',
-							'大类',
-							'财务利润目标(%)',
-							'业务利润目标(%)',
-						],'利润目标信息(模板)')
+						downloadTemplate(
+							[
+								'价格体系',
+								'部门',
+								'平台',
+								'大类',
+								'财务利润目标(%)',
+								'业务利润目标(%)',
+							],
+							'利润目标信息(模板)'
+						)
 					"
 					>下载模板</el-button
 				>
