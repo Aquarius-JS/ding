@@ -7,8 +7,8 @@ import { storeToRefs } from "pinia";
 import router from "@/router";
 import { IP } from "@/config/httpConfig";
 const httpInstance = axios.create({
-	baseURL: `http:${IP}//:8888/api`,
-	timeout: 5000,
+	baseURL: `http://${IP}:8888/api`,
+	timeout: 1000 * 10,
 });
 
 //拦截器配置

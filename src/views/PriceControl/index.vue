@@ -47,7 +47,6 @@
 		res = await PriceSystemAPI.getAll();
 		priceSystems.value = res.data;
 		res = await ProductAPI.getAll();
-		console.log(res.data);
 		products.value = uniqBy(res.data, "category");
 	};
 	const updateHandle = async e => {
@@ -67,7 +66,6 @@
 	};
 	const downLoadExcel = async () => {
 		const priceControlList = await PriceControlAPI.getAll();
-		console.log(priceControlList.data);
 		const data = priceControlList?.data.map(item => ({
 			价格体系: item.price_system_name,
 			部门: item.department,
@@ -91,7 +89,6 @@
 		await PriceControlAPI.batchAdd(data);
 		await getByOpts();
 		isLoading.value = false;
-		fileInputRef.value = null;
 	};
 	const currentChangeHandler = _pageNum => {
 		pageNum.value = _pageNum;

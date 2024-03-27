@@ -13,6 +13,7 @@
     "@vueuse/core": "^10.2.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",
+    "decimal.js": "^10.4.3",
     "element-plus": "^2.3.7",
     "lodash": "^4.17.21",
     "pinia": "^2.1.3",

@@ -29,7 +29,6 @@
 	const getAll = async () => {
 		isLoading.value = true;
 		const res = await ProductAPI.getAll();
-		console.log(res);
 		productList.value = res.data;
 		isLoading.value = false;
 	};
