@@ -78,13 +78,19 @@
 	const uploadExcel = async () => {
 		isLoading.value = true;
 		const res = await upload(fileInputRef.value.files);
-		const data = res.map(item => ({
-			price_system_name: item["价格体系"],
-			department: item["部门"],
-			platform: item["平台"],
-			category: item["大类"],
-			control_price: item["控价(元)"] * 1,
-		}));
+		const data = res.map(item => {
+			const _obj = {};
+			Object.keys(item).forEach(key => {
+				_obj[key.trim()] = item[key].trim();
+			});
+			return {
+				price_system_name: _obj["价格体系"],
+				department: _obj["部门"],
+				platform: _obj["平台"],
+				category: _obj["大类"],
+				control_price: _obj["控价(元)"] * 1,
+			};
+		});
 		await PriceControlAPI.delAll();
 		await PriceControlAPI.batchAdd(data);
 		await getByOpts();

@@ -29,8 +29,10 @@
 		const res = await ProfitTargetAPI.getAll();
 		profitTargetList.value = res.data.map(item => ({
 			...item,
-			financial_profit_target: new Decimal(item.financial_profit_target).mul(100).toNumber(),
-			profit_target: new Decimal(item.profit_target).mul(100).toNumber(),
+			financial_profit_target: new Decimal(item.financial_profit_target ?? 0)
+				.mul(100)
+				.toNumber(),
+			profit_target: new Decimal(item.profit_target ?? 0).mul(100).toNumber(),
 		}));
 		isLoading.value = false;
 	};
@@ -67,14 +69,20 @@
 		profitTargetList.value = [];
 		isLoading.value = true;
 		const res = await upload(fileInputRef.value.files);
-		const data = res.map(item => ({
-			price_system: item["价格体系"],
-			department: item["部门"],
-			platform: item["平台"],
-			category: item["大类"],
-			financial_profit_target: item["财务利润目标(%)"] * 0.01,
-			profit_target: item["业务利润目标(%)"] * 0.01,
-		}));
+		const data = res.map(item => {
+			const _obj = {};
+			Object.keys(item).forEach(key => {
+				_obj[key.trim()] = item[key].trim();
+			});
+			return {
+				price_system: _obj["价格体系"],
+				department: _obj["部门"],
+				platform: _obj["平台"],
+				category: _obj["大类"],
+				financial_profit_target: _obj["财务利润目标(%)"] * 0.01,
+				profit_target: _obj["业务利润目标(%)"] * 0.01,
+			};
+		});
 		await ProfitTargetAPI.batchUpdate(data);
 		await getAll();
 	};

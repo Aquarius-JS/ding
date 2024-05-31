@@ -14,7 +14,6 @@
 		isLoading.value = true;
 		const obj = {};
 		Object.entries(e.row).forEach(item => (obj[item[0]] = item[1] * 1));
-		console.log(obj);
 		await LogisticsAPI.update({
 			...obj,
 			id: e.row.id,

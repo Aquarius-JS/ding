@@ -12,7 +12,6 @@
 	const getLogList = async () => {
 		const res = await FrontLogAPI.getAll({ page: page.value, pageNum: pageNum.value });
 		logList.value = res.data;
-		console.log(res.data, "@@@");
 		logList.value = res.data.map(item => ({
 			...item,
 			res: {
@@ -29,7 +28,6 @@
 				})),
 			},
 		}));
-		console.log(logList.value, "!!");
 		if (pageNum.value === 1) {
 			total.value = res.count;
 		}
@@ -45,7 +43,6 @@
 	onMounted(async () => {
 		const res = await ProductAPI.getAll();
 		productList.value = res.data;
-		console.log(productList.value);
 		await getLogList();
 	});
 </script>

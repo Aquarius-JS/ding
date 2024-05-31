@@ -70,15 +70,21 @@
 	const uploadExcel = async () => {
 		const res = await upload(fileInputRef.value.files);
 		if (!res) return;
-		const data = res.map(item => ({
-			category: item["大类"],
-			name: item["名称"],
-			num: item["编码"],
-			financial_costs: item["财务成本(元)"] * 1,
-			cost: item["业务成本(元)"] * 1,
-			weight: item["重量(kg)"] * 1,
-			v: item["体积(cm³)"] * 1,
-		}));
+		const data = res.map(item => {
+			const _obj = {};
+			Object.keys(item).forEach(key => {
+				_obj[key.trim()] = item[key].trim();
+			});
+			return {
+				category: _obj["大类"],
+				name: _obj["名称"],
+				num: _obj["编码"],
+				financial_costs: _obj["财务成本(元)"] * 1,
+				cost: _obj["业务成本(元)"] * 1,
+				weight: _obj["重量(kg)"] * 1,
+				v: _obj["体积(cm³)"] * 1,
+			};
+		});
 		isLoading.value = true;
 		await ProductAPI.batchProduct(data);
 		await getAll();
@@ -124,15 +130,18 @@
 				<el-button
 					type="primary"
 					@click="
-						downloadTemplate([
-							'大类',
-							'名称',
-							'编码',
-							'财务成本(元)',
-							'业务成本(元)',
-							'重量(kg)',
-							'体积(cm³)',
-						],'产品基本信息(模板)')
+						downloadTemplate(
+							[
+								'大类',
+								'名称',
+								'编码',
+								'财务成本(元)',
+								'业务成本(元)',
+								'重量(kg)',
+								'体积(cm³)',
+							],
+							'产品基本信息(模板)'
+						)
 					"
 					>下载模板</el-button
 				>
